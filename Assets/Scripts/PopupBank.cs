@@ -4,9 +4,17 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static DataManager;
 
 public class PopupBank : MonoBehaviour
 {
+    public GameObject loginWindow;
+    public Button loginBtn;
+    public Button signUpBtn;
+
+    public TMP_InputField idInput;
+    public TMP_InputField psInput;
+
     public GameObject depositButton;
     public GameObject withdrawButton;
 
@@ -26,20 +34,42 @@ public class PopupBank : MonoBehaviour
 
     [SerializeField] UserData userData;
 
-    /*
-    public void Onclick()
+    public void Start()
     {
-        ActiveDepositSystems();
-        ActiveWithdrawSystems();
+        Button btn = signUpBtn.GetComponent<Button>();
+        btn.onClick.AddListener(SignUp);
 
-        CloseActiveSystems();
-
-        PopupBankDepositing();
-        PopupBankWithdrawing();
-
-        CloseNoCashPopUp();
+        Button loginbtn = loginBtn.GetComponent<Button>();
+        loginbtn.onClick.AddListener(Login);
     }
-    */
+
+    public void SignUp()
+    {
+        GameManager.Instance.userData.ID = idInput.text;
+        GameManager.Instance.userData.Passward = psInput.text;
+
+        DataManager.instance.SaveData();
+    }
+
+    public void Login()
+    {
+        if (GameManager.Instance.userData.ID == idInput.text && GameManager.Instance.userData.Passward == psInput.text)
+        {
+            ClosedLoginWindow();
+        }
+
+        else
+        {
+            Debug.Log("a Salt!");
+        }
+    }
+
+
+    public void ClosedLoginWindow()
+    {
+        loginWindow.SetActive(false);
+    }
+
 
     public void ActiveDepositSystems() //입금 창 액티브
     {
@@ -95,106 +125,6 @@ public class PopupBank : MonoBehaviour
         }
     }
 
-    /*
-    public void DepositCash10000() // 특정 금액 입금 버튼
-    {
-        if (GameManager.Instance.userData.cash >= 10000)
-        {
-            GameManager.Instance.userData.cash -= 10000;
-            GameManager.Instance.userData.balance += 10000;
-        }
-        else
-        {
-            noCash.SetActive(true);
-            Debug.Log("돈이 없더");
-        }
-    }
-
-    public void DepositCash30000() // 특정 금액 입금 버튼
-    {
-        if (GameManager.Instance.userData.cash >= 30000)
-        {
-            GameManager.Instance.userData.cash -= 30000;
-            GameManager.Instance.userData.balance += 30000;
-        }
-        else
-        {
-            noCash.SetActive(true);
-            Debug.Log("돈이 없더");
-        }
-    }
-
-    public void DepositCash50000() // 특정 금액 입금 버튼
-    {
-        if (GameManager.Instance.userData.cash >= 50000)
-        {
-            GameManager.Instance.userData.cash -= 50000;
-            GameManager.Instance.userData.balance += 50000;
-        }
-        else
-        {
-            noCash.SetActive(true);
-            Debug.Log("돈이 없더");
-        }
-    }
-
-
-
-    public void WithdrawCash10000() //특정 금액 출금 버튼
-    {
-        {
-            if (GameManager.Instance.userData.cash >= 10000)
-            {
-                GameManager.Instance.userData.cash -= 10000;
-                GameManager.Instance.userData.balance += 10000;
-            }
-
-            else
-            {
-                noCash.SetActive(true);
-                Debug.Log("돈이 없더");
-            }
-        }
-    }
-
-    public void WithdrawCash30000()
-    {
-        {
-            if (GameManager.Instance.userData.cash >= 30000)
-            {
-                GameManager.Instance.userData.cash -= 30000;
-                GameManager.Instance.userData.balance += 30000;
-            }
-
-            else
-            {
-                noCash.SetActive(true);
-                Debug.Log("돈이 없더");
-            }
-        }
-    }
-
-    public void WithdrawCash50000()
-    {
-        {
-            if (GameManager.Instance.userData.cash >= 50000)
-            {
-                GameManager.Instance.userData.cash -= 50000;
-                GameManager.Instance.userData.balance += 50000;
-            }
-
-            else
-            {
-                noCash.SetActive(true);
-                Debug.Log("돈이 없더");
-            }
-        }
-    }
-    */
-
-
-
-
     public void PlusCash()
     {
         GameManager.Instance.userData.cash += 10000;
@@ -204,11 +134,6 @@ public class PopupBank : MonoBehaviour
     {
         GameManager.Instance.userData.balance += 10000;
     }
-
-
-
-
-
 
     public void PopupBankDepositing() //커스텀 인풋 입금 금액
     {
@@ -220,14 +145,6 @@ public class PopupBank : MonoBehaviour
         if (int.TryParse(depositCashStr, out depositAmount))
         {
             DepositCash(depositAmount);
-
-            /*
-            if (GameManager.Instance.userData.cash >= depositAmount)
-            {
-                GameManager.Instance.userData.cash -= depositAmount;
-                GameManager.Instance.userData.balance += depositAmount;
-            }
-            */
         }
     }
 
@@ -242,19 +159,6 @@ public class PopupBank : MonoBehaviour
         if (int.TryParse(withdrawCashStr, out withdrawAmount))
         {
             WithdrawCash(withdrawAmount);
-            /*
-            if (GameManager.Instance.userData.balance >= withdrawAmount)
-            {
-                GameManager.Instance.userData.cash += withdrawAmount;
-                GameManager.Instance.userData.balance -= withdrawAmount;
-            }
-
-            else
-            {
-                noCash.SetActive(true);
-                Debug.Log("돈이 없더");
-            }
-            */
         }
     }
 

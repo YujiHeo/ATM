@@ -11,10 +11,16 @@ public class DataManager : MonoBehaviour
     {
         public int cash;
         public int balance;
+    }
 
+    public class IDData
+    {
+        public string id;
+        public string ps;
     }
 
     CashData nowCash;
+    IDData iDData;
 
     string filePath;
 
@@ -47,10 +53,16 @@ public class DataManager : MonoBehaviour
     {
         nowCash.cash = GameManager.Instance.userData.cash; //userData∏¶ πŸ∑Œ ¿˙¿Â
         nowCash.balance = GameManager.Instance.userData.balance;
+        iDData.id = GameManager.Instance.userData.ID;
+        iDData.ps = GameManager.Instance.userData.Passward;
 
         string data = JsonUtility.ToJson(nowCash);
+        string loginData = JsonUtility.ToJson(iDData);
+
+        Debug.Log($"¿˙¿Âµ∆Ωøµ’{loginData}");
 
         File.WriteAllText(filePath, data);
+        File.WriteAllText(filePath, loginData);
     }
     
 
@@ -61,12 +73,21 @@ public class DataManager : MonoBehaviour
             string data = File.ReadAllText(filePath);
             nowCash = JsonUtility.FromJson<CashData>(data);
 
+            string loginData = File.ReadAllText(filePath);
+            iDData = JsonUtility.FromJson<IDData>(loginData);
+
             GameManager.Instance.userData.cash = nowCash.cash;
             GameManager.Instance.userData.balance = nowCash.balance;
+
+            GameManager.Instance.userData.ID = iDData.id;
+            GameManager.Instance.userData.Passward = iDData.ps;
         }
         else
         {
             nowCash = new CashData();
+            iDData = new IDData();
+
+
             SaveData();
         }
     }

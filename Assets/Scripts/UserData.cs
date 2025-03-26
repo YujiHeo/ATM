@@ -7,7 +7,9 @@ public enum DataType
 {
     UserName,
     Cash,
-    Balance
+    Balance,
+    ID,
+    Passward
 }
 
 [System.Serializable]
@@ -17,5 +19,7 @@ public class UserData
     public string userName;
     public int cash;
     public int balance;
+    public string ID;
+    public string Passward;
 }
 
